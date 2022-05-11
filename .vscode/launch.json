@@ -12,7 +12,6 @@
       "address": "localhost",
       "localRoot": "${workspaceRoot}/browser-app/src-gen/backend/main.js",
       "remoteRoot": "/home/theia-idf-extension/browser-app/src-gen/backend/main.js",
-      "protocol": "inspector",
       "sourceMaps": true
     },
     {
@@ -49,7 +48,6 @@
         "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
       },
       "program": "${workspaceRoot}/electron-app/src-gen/frontend/electron-main.js",
-      "protocol": "inspector",
       "args": ["--loglevel=debug", "--hostname=localhost", "--no-cluster"],
       "env": {
         "NODE_ENV": "development"
