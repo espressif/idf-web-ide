@@ -4,9 +4,10 @@ on:
   push:
     tags:
       - "v*"
-      
+
 jobs:
   docker:
+    name: Build and upload release docker image
     runs-on: ubuntu-latest
 
     steps:
@@ -43,12 +44,12 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1.0.0
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Espressif IDF WEB IDE Release ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
           draft: true
           body: |
             ### Release Highlights
@@ -60,12 +61,3 @@ jobs:
             ### Bug Fixes
 
             <!-- Insert The Bug Fixes below as points, also add relevant links -->
-      
-      - name: Upload release asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_content_type: application/zip
