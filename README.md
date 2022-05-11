@@ -1,5 +1,6 @@
 [![GitHub release](https://img.shields.io/github/release/espressif/idf-web-ide.svg?style=flat-square)](https://github.com/espressif/idf-web-ide/releases/latest)
-[![CI workflow](https://img.shields.io/github/workflow/status/espressif/idf-web-ide/Publish%20docker%20image?label=Docker%20release&logo=docker)](https://github.com/espressif/idf-web-ide/actions?workflow=Publish%20docker%20image)
+[![Docker workflow](https://img.shields.io/github/workflow/status/espressif/idf-web-ide/Publish%20docker%20image?label=Docker%20build%20status&logo=docker)](https://github.com/espressif/idf-web-ide/actions?workflow=Publish%20docker%20image)
+[![Docker Releases](https://img.shields.io/badge/-Docker%20Releases-blue)](https://hub.docker.com/r/espbignacio/idf-web-ide)
 
 # Espressif IDF WEB IDE
 
