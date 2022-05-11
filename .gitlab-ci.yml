@@ -1,0 +1,42 @@
+stages:
+  - test
+  - build
+  - deploy
+
+build_test:
+  image: node:12-stretch
+  stage: test
+  tags:
+    - test_brno
+  script:
+    - yarn
+
+docker_build:
+  image: espressif/dind:1
+  stage: build
+  tags: ["dind", "internet", "amd64"]
+  before_script:
+    - echo "building docker image"
+  script:
+    - mkdir -p _config
+    - echo ${DOCKER_AUTH_CONFIG} > _config/config.json
+    - echo ${CI_DOCKER_REGISTRY}
+    - docker build . --tag ${CI_DOCKER_REGISTRY}/idf-web-ide
+    - docker --config=./_config push ${CI_DOCKER_REGISTRY}/idf-web-ide:latest
+
+heroku_deploy:
+  image: docker:latest
+  when: "manual"
+  before_script:
+    - echo "skipping deploying to heroku..."
+  stage: deploy
+  tags:
+    - deploy
+  script:
+    - docker build -f Dockerfile --iidfile imageid.txt -t registry.heroku.com/idf-web .
+    - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
+    - docker push registry.heroku.com/idf-web
+    - apk add --no-cache curl
+    - echo "Docker Image ID is $(cat imageid.txt)"
+    - |-
+      curl -X PATCH https://api.heroku.com/apps/idf-web/formation --header "Content-Type: application/json" --header "Accept: application/vnd.heroku+json; version=3.docker-releases" --header "Authorization: Bearer ${HEROKU_TOKEN}" --data '{ "updates": [ { "type": "web", "docker_image": "'$(cat imageid.txt)'" } ] }'

@@ -1,0 +1,26 @@
+{
+    "name": "esp-remote-welcome-page",
+    "keywords": [
+      "theia-extension"
+    ],
+    "version": "0.0.1",
+    "files": [
+        "lib",
+        "src"
+    ],
+    "devDependencies": {
+        "rimraf": "latest",
+        "typescript": "latest"
+    },
+    "scripts": {
+        "prepare": "yarn run clean && yarn run build",
+        "clean": "rimraf lib",
+        "build": "tsc",
+        "watch": "tsc -w"
+    },
+    "theiaExtensions": [
+        {
+            "frontend": "lib/browser/esp-remote-welcome-page-frontend-module"
+        }
+    ]
+}

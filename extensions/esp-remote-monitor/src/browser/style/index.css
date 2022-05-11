@@ -1,0 +1,63 @@
+.input {
+  background-color: var(--theia-input-background);
+  border-color: var(--theia-inputOption-activeBorder);
+  color: var(--theia-input-foreground);
+}
+.input::placeholder{
+  color: var(--theia-input-placeholderForeground);
+}
+.input:hover {
+  border-color: var(--theia-inputOption-activeBorder);
+}
+.input:active, 
+.input:focus {
+  border-color: var(--theia-inputOption-activeBorder);
+}
+
+.button {
+  background-color: var(--theia-button-background);
+  border-color: var(--theia-button-background);
+  color: var(--theia-button-foreground);
+}
+.button:disabled {
+  background-color: var(--theia-notifications-background);
+}
+.button:active {
+  box-shadow: none;
+}
+.button:hover:disabled {
+  color: var(--theia-button-foreground);
+}
+.button:hover:enabled,
+button > span.icon:hover,
+button > span.icon > i:hover {
+  background-color: var(--theia-button-hoverBackground);
+  border-color: var(--theia-button-background);
+  color: var(--theia-button-foreground);
+}
+.button:focus, .button.is-focused {
+  border-color: var(--theia-button-background);
+  color: var(--theia-button-foreground);
+}
+
+.notification {
+  color: var(--theia-foreground);
+  background-color: var(--theia-menu-background);
+}
+
+
+.fixed-height-2em {
+  height: 2em;
+}
+
+.fixed-height-100-per-minus-4em{
+  height: calc(100% - 4em);
+}
+
+.background-transparent {
+  background-color: transparent;
+}
+
+.is-scrollable {
+  overflow: auto;
+}

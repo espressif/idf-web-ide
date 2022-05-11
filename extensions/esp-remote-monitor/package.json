@@ -1,0 +1,33 @@
+{
+  "name": "esp-remote-monitor",
+  "keywords": [
+    "theia-extension"
+  ],
+  "version": "0.0.1",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "dependencies": {
+    "ansi-to-html": "^0.6.13",
+    "bulma": "^0.8.0",
+    "react-html-parser": "^2.0.2",
+    "@theia/core": "latest"
+  },
+  "devDependencies": {
+    "@types/react-html-parser": "^2.0.1",
+    "rimraf": "latest",
+    "typescript": "latest"
+  },
+  "scripts": {
+    "prepare": "yarn run clean && yarn run build",
+    "clean": "rimraf lib",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "theiaExtensions": [
+    {
+      "frontend": "lib/browser/esp-remote-monitor-frontend-module"
+    }
+  ]
+}

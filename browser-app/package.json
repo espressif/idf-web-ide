@@ -1,0 +1,74 @@
+{
+  "private": true,
+  "name": "browser-app",
+  "version": "0.0.1",
+  "dependencies": {
+    "@theia/core": "latest",
+    "@theia/editor": "latest",
+    "@theia/debug": "latest",
+    "@theia/filesystem": "latest",
+    "@theia/git": "latest",
+    "@theia/markers": "latest",
+    "@theia/messages": "latest",
+    "@theia/monaco": "latest",
+    "@theia/navigator": "latest",
+    "@theia/plugin-dev": "latest",
+    "@theia/plugin-ext": "latest",
+    "@theia/plugin-ext-vscode": "latest",
+    "@theia/preferences": "latest",
+    "@theia/preview": "latest",
+    "@theia/process": "latest",
+    "@theia/workspace": "latest",
+    "bson": "^4.0.2",
+    "esp-remote-flasher": "0.0.1",
+    "esp-remote-monitor": "0.0.1",
+    "esp-remote-welcome-page": "0.0.1",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@theia/cli": "latest",
+    "@types/bson": "^4.0.0"
+  },
+  "scripts": {
+    "prepare": "yarn build && theia download:plugins",
+    "build": "theia build --mode development",
+    "start": "theia start --plugins=local-dir:../vscode-extensions",
+    "start:debug": "theia start --log-level=debug --plugins=local-dir:../vscode-extensions",
+    "watch": "theia build --watch --mode development"
+  },
+  "theia": {
+    "target": "browser",
+    "frontend": {
+      "config": {
+        "applicationName": "ESP-IDF Theia",
+        "preferences": {
+          "idf.adapterTargetName": "esp32",
+          "idf.espIdfPath": "/opt/esp/idf",
+          "idf.customExtraPaths": "",
+          "idf.pythonBinPath": "/opt/esp/python_env/idf4.4_py3.8_env/bin/python",
+          "idf.toolsPath": "/opt/esp",
+          "idf.gitPath": "/usr/bin/git",
+          "idf.enableIdfComponentManager": true
+        }
+      }
+    }
+  },
+  "theiaPluginsDir": "../vscode-extensions",
+  "theiaPlugins": {
+    "espressif.esp-idf-extension": "https://github.com/espressif/vscode-esp-idf-extension/releases/download/v1.4.0/esp-idf-extension-open-1.4.0.vsix",
+    "vscode-builtin-configuration-editing": "https://open-vsx.org/api/vscode/configuration-editing/1.45.1/file/vscode.configuration-editing-1.45.1.vsix",
+    "vscode-builtin-cpp": "https://open-vsx.org/api/vscode/cpp/1.45.1/file/vscode.cpp-1.45.1.vsix",
+    "vscode-builtin-css": "https://open-vsx.org/api/vscode/css/1.45.1/file/vscode.css-1.45.1.vsix",
+    "vscode-builtin-css-language-features": "https://open-vsx.org/api/vscode/css-language-features/1.45.1/file/vscode.css-language-features-1.45.1.vsix",
+    "vscode-builtin-javascript": "https://open-vsx.org/api/vscode/javascript/1.45.1/file/vscode.javascript-1.45.1.vsix",
+    "vscode-builtin-js-debug": "https://open-vsx.org/api/ms-vscode/js-debug/1.49.8/file/ms-vscode.js-debug-1.49.8.vsix",
+    "vscode-builtin-json": "https://open-vsx.org/api/vscode/json/1.46.1/file/vscode.json-1.46.1.vsix",
+    "vscode-builtin-json-language-features": "https://open-vsx.org/api/vscode/json-language-features/1.46.1/file/vscode.json-language-features-1.46.1.vsix",
+    "vscode-builtin-log": "https://open-vsx.org/api/vscode/log/1.45.1/file/vscode.log-1.45.1.vsix",
+    "vscode-builtin-python": "https://open-vsx.org/api/vscode/python/1.45.1/file/vscode.python-1.45.1.vsix",
+    "vscode-builtin-rust": "https://open-vsx.org/api/vscode/rust/1.45.1/file/vscode.rust-1.45.1.vsix",
+    "vscode-builtin-typescript": "https://open-vsx.org/api/vscode/typescript/1.45.1/file/vscode.typescript-1.45.1.vsix",
+    "vscode-builtin-typescript-language-features": "https://open-vsx.org/api/vscode/typescript-language-features/1.45.1/file/vscode.typescript-language-features-1.45.1.vsix",
+    "vscode-clangd": "https://open-vsx.org/api/llvm-vs-code-extensions/vscode-clangd/0.1.7/file/llvm-vs-code-extensions.vscode-clangd-0.1.7.vsix"
+  }
+}
