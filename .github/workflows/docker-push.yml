@@ -29,4 +29,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: espressif/idf-web-ide:latest
+          tags: espbignacio/idf-web-ide:latest
