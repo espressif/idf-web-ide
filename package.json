@@ -8,6 +8,8 @@
     "lerna": "2.4.0"
   },
   "workspaces": [
-    "extensions/*", "browser-app"
-  ]
+    "extensions/*",
+    "browser-app"
+  ],
+  "version": "0.0.1"
 }
