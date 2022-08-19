@@ -1,13 +1,12 @@
 import * as React from "react";
 import { inject, injectable, postConstruct } from "inversify";
 import { ReactWidget } from "@theia/core/lib/browser/widgets/react-widget";
-import { serialize } from "bson";
+// import { serialize } from "bson";
 import { MessageService } from "@theia/core";
-import { MessageProtocol } from "../common/message";
+// import { MessageProtocol } from "../common/message";
 import { MonitorType } from "../common/monitor";
 import { RemoteMonitor } from "./remoteMonitor";
-import { MonitorComponent } from "./components/monitor";
-
+// import { MonitorComponent } from "./components/monitor";
 export interface MonitorMessage {
   type: MonitorType;
   message: any;
@@ -39,21 +38,21 @@ export class MonitorWidget extends ReactWidget {
     this.update();
   }
 
-  private handleUserMsg(message: string) {
-    const remoteMonitor = RemoteMonitor.init();
-    if (remoteMonitor.isMonitoring()) {
-      const msgProtocol = new MessageProtocol("monitor");
-      msgProtocol.add("monitor-type", MonitorType.MessageToChip);
-      msgProtocol.add("message", message);
+  // private handleUserMsg(message: string) {
+  //   const remoteMonitor = RemoteMonitor.init();
+  //   if (remoteMonitor.isMonitoring()) {
+  //     const msgProtocol = new MessageProtocol("monitor");
+  //     msgProtocol.add("monitor-type", MonitorType.MessageToChip);
+  //     msgProtocol.add("message", message);
 
-      remoteMonitor.sendMessageToChip(serialize(msgProtocol.message));
+  //     remoteMonitor.sendMessageToChip(serialize(msgProtocol.message));
 
-      this.addNewMessage({
-        type: MonitorType.MessageToChip,
-        message,
-      });
-    }
-  }
+  //     this.addNewMessage({
+  //       type: MonitorType.MessageToChip,
+  //       message,
+  //     });
+  //   }
+  // }
 
   protected async onAfterAttach() {
     const remoteMonitor = RemoteMonitor.init();
@@ -87,11 +86,12 @@ export class MonitorWidget extends ReactWidget {
   }
 
   protected render(): React.ReactNode {
-    return (
-      <MonitorComponent
-        messages={this.messages}
-        onNewMessage={(message: string) => this.handleUserMsg(message)}
-      />
-    );
+    // return (<MonitorComponent
+    //   messages={this.messages}
+    //   onNewMessage={(message: string) => this.handleUserMsg(message)}
+    // />);
+    return <div id='widget-container'>
+            <button id='displayMessageButton' className='theia-button secondary' title='Display Message' >Display Message</button>
+        </div>
   }
 }

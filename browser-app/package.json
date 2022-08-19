@@ -5,24 +5,22 @@
   "dependencies": {
     "@theia/core": "latest",
     "@theia/editor": "latest",
-    "@theia/debug": "latest",
     "@theia/filesystem": "latest",
-    "@theia/git": "latest",
     "@theia/markers": "latest",
     "@theia/messages": "latest",
     "@theia/monaco": "latest",
     "@theia/navigator": "latest",
-    "@theia/plugin-dev": "latest",
-    "@theia/plugin-ext": "latest",
     "@theia/plugin-ext-vscode": "latest",
     "@theia/preferences": "latest",
     "@theia/preview": "latest",
     "@theia/process": "latest",
+    "@theia/terminal": "latest",
     "@theia/workspace": "latest",
     "bson": "^4.0.2",
     "esp-remote-flasher": "0.0.1",
     "esp-remote-monitor": "0.0.1",
     "esp-remote-welcome-page": "0.0.1",
+    "esp-webserial": "0.0.1",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
@@ -55,20 +53,22 @@
   },
   "theiaPluginsDir": "../vscode-extensions",
   "theiaPlugins": {
-    "espressif.esp-idf-extension": "https://github.com/espressif/vscode-esp-idf-extension/releases/download/v1.4.0/esp-idf-extension-open-1.4.0.vsix",
-    "vscode-builtin-configuration-editing": "https://open-vsx.org/api/vscode/configuration-editing/1.45.1/file/vscode.configuration-editing-1.45.1.vsix",
-    "vscode-builtin-cpp": "https://open-vsx.org/api/vscode/cpp/1.45.1/file/vscode.cpp-1.45.1.vsix",
-    "vscode-builtin-css": "https://open-vsx.org/api/vscode/css/1.45.1/file/vscode.css-1.45.1.vsix",
-    "vscode-builtin-css-language-features": "https://open-vsx.org/api/vscode/css-language-features/1.45.1/file/vscode.css-language-features-1.45.1.vsix",
-    "vscode-builtin-javascript": "https://open-vsx.org/api/vscode/javascript/1.45.1/file/vscode.javascript-1.45.1.vsix",
-    "vscode-builtin-js-debug": "https://open-vsx.org/api/ms-vscode/js-debug/1.49.8/file/ms-vscode.js-debug-1.49.8.vsix",
-    "vscode-builtin-json": "https://open-vsx.org/api/vscode/json/1.46.1/file/vscode.json-1.46.1.vsix",
-    "vscode-builtin-json-language-features": "https://open-vsx.org/api/vscode/json-language-features/1.46.1/file/vscode.json-language-features-1.46.1.vsix",
-    "vscode-builtin-log": "https://open-vsx.org/api/vscode/log/1.45.1/file/vscode.log-1.45.1.vsix",
-    "vscode-builtin-python": "https://open-vsx.org/api/vscode/python/1.45.1/file/vscode.python-1.45.1.vsix",
-    "vscode-builtin-rust": "https://open-vsx.org/api/vscode/rust/1.45.1/file/vscode.rust-1.45.1.vsix",
-    "vscode-builtin-typescript": "https://open-vsx.org/api/vscode/typescript/1.45.1/file/vscode.typescript-1.45.1.vsix",
-    "vscode-builtin-typescript-language-features": "https://open-vsx.org/api/vscode/typescript-language-features/1.45.1/file/vscode.typescript-language-features-1.45.1.vsix",
-    "vscode-clangd": "https://open-vsx.org/api/llvm-vs-code-extensions/vscode-clangd/0.1.7/file/llvm-vs-code-extensions.vscode-clangd-0.1.7.vsix"
-  }
+    "espressif.esp-idf-extension": "https://github.com/espressif/vscode-esp-idf-extension/releases/download/v1.5.0/esp-idf-extension-open-1.5.0.vsix",
+    "eclipse-theia.builtin-extension-pack": "https://open-vsx.org/api/eclipse-theia/builtin-extension-pack/1.50.1/file/eclipse-theia.builtin-extension-pack-1.50.1.vsix",
+    "vscode-clangd": "https://open-vsx.org/api/llvm-vs-code-extensions/vscode-clangd/0.1.21/file/llvm-vs-code-extensions.vscode-clangd-0.1.21.vsix",
+    "vscode.typescript": "https://open-vsx.org/api/vscode/typescript/1.62.3/file/vscode.typescript-1.62.3.vsix",
+    "vscode.typescript-language-features": "https://open-vsx.org/api/vscode/typescript-language-features/1.62.3/file/vscode.typescript-language-features-1.62.3.vsix",
+    "EditorConfig.EditorConfig": "https://open-vsx.org/api/EditorConfig/EditorConfig/0.14.4/file/EditorConfig.EditorConfig-0.14.4.vsix",
+    "dbaeumer.vscode-eslint": "https://open-vsx.org/api/dbaeumer/vscode-eslint/2.1.1/file/dbaeumer.vscode-eslint-2.1.1.vsix",
+    "ms-vscode.references-view": "https://open-vsx.org/api/ms-vscode/references-view/0.0.89/file/ms-vscode.references-view-0.0.89.vsix"
+  },
+  "theiaPluginsExcludeIds": [
+    "ms-vscode.js-debug-companion",
+    "vscode.extension-editing",
+    "vscode.git",
+    "vscode.git-ui",
+    "vscode.github",
+    "vscode.github-authentication",
+    "vscode.microsoft-authentication"
+  ]
 }

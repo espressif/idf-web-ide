@@ -1,10 +1,10 @@
-import * as React from "react";
+import React = require('react');
 import { MonitorType } from "../../common/monitor";
 import { MonitorMessage } from "../monitor-widget";
-import * as ansiToHTML from "ansi-to-html";
+import ansiToHTML = require("ansi-to-html");
 import ReactHtmlParser from "react-html-parser";
 
-interface MonitorComponentProps {
+export interface MonitorComponentProps {
   messages: Array<MonitorMessage>;
   onNewMessage: Function;
 }
@@ -12,11 +12,6 @@ interface MonitorComponentProps {
 const converter = new ansiToHTML();
 
 export class MonitorComponent extends React.Component<MonitorComponentProps> {
-  constructor(props: any) {
-    super(props);
-    this.messages.bind(this);
-  }
-
   messages(props: any): JSX.Element {
     const messages: Array<MonitorMessage> = props.messages;
     const htmlMessages = messages.map((m: MonitorMessage, i: number) => {
@@ -78,5 +73,5 @@ export class MonitorComponent extends React.Component<MonitorComponentProps> {
             <this.messages messages={this.props.messages} />
         </div>
     </div>
-}
+  }
 }
