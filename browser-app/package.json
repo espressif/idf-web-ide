@@ -16,6 +16,7 @@
     "@theia/process": "latest",
     "@theia/terminal": "latest",
     "@theia/workspace": "latest",
+    "@theia/vsx-registry": "latest",
     "bson": "^4.0.2",
     "esp-remote-flasher": "0.0.1",
     "esp-remote-monitor": "0.0.1",
@@ -54,21 +55,21 @@
   "theiaPluginsDir": "../vscode-extensions",
   "theiaPlugins": {
     "espressif.esp-idf-extension": "https://github.com/espressif/vscode-esp-idf-extension/releases/download/v1.5.0/esp-idf-extension-open-1.5.0.vsix",
-    "eclipse-theia.builtin-extension-pack": "https://open-vsx.org/api/eclipse-theia/builtin-extension-pack/1.50.1/file/eclipse-theia.builtin-extension-pack-1.50.1.vsix",
-    "vscode-clangd": "https://open-vsx.org/api/llvm-vs-code-extensions/vscode-clangd/0.1.21/file/llvm-vs-code-extensions.vscode-clangd-0.1.21.vsix",
+    "eclipse-theia.builtin-extension-pack": "https://open-vsx.org/api/eclipse-theia/builtin-extension-pack/1.62.3/file/eclipse-theia.builtin-extension-pack-1.62.3.vsix",
+    "vscode-clangd": "https://open-vsx.org/api/llvm-vs-code-extensions/vscode-clangd/0.1.12/file/llvm-vs-code-extensions.vscode-clangd-0.1.12.vsix",
     "vscode.typescript": "https://open-vsx.org/api/vscode/typescript/1.62.3/file/vscode.typescript-1.62.3.vsix",
     "vscode.typescript-language-features": "https://open-vsx.org/api/vscode/typescript-language-features/1.62.3/file/vscode.typescript-language-features-1.62.3.vsix",
-    "EditorConfig.EditorConfig": "https://open-vsx.org/api/EditorConfig/EditorConfig/0.14.4/file/EditorConfig.EditorConfig-0.14.4.vsix",
-    "dbaeumer.vscode-eslint": "https://open-vsx.org/api/dbaeumer/vscode-eslint/2.1.1/file/dbaeumer.vscode-eslint-2.1.1.vsix",
-    "ms-vscode.references-view": "https://open-vsx.org/api/ms-vscode/references-view/0.0.89/file/ms-vscode.references-view-0.0.89.vsix"
+    "EditorConfig.EditorConfig": "https://open-vsx.org/api/EditorConfig/EditorConfig/0.16.6/file/EditorConfig.EditorConfig-0.16.6.vsix",
+    "dbaeumer.vscode-eslint": "https://open-vsx.org/api/dbaeumer/vscode-eslint/2.1.1/file/dbaeumer.vscode-eslint-2.1.1.vsix"
   },
   "theiaPluginsExcludeIds": [
     "ms-vscode.js-debug-companion",
+    "vscode.dart",
     "vscode.extension-editing",
-    "vscode.git",
-    "vscode.git-ui",
-    "vscode.github",
-    "vscode.github-authentication",
+    "vscode.ipynb",
+    "vscode.julia",
+    "vscode.markdown-language-features",
+    "vscode.markdown-math",
     "vscode.microsoft-authentication"
   ]
 }

@@ -11,13 +11,17 @@ RUN useradd -m iwiuser
 # To install dependencies
 RUN apt-get update \
   && apt-get install -y -q ca-certificates \
-  && curl -sL https://deb.nodesource.com/setup_12.x | bash \
+  && curl -sL https://deb.nodesource.com/setup_16.x | bash \
   && apt install -y -q \
+    g++ \
     git \
     libglib2.0-0 \
     libnuma1 \
     libpixman-1-0 \
+    libsecret-1-dev \
+    make \
     nodejs \
+    pkgconf \
   && npm install -g yarn typescript \
   && rm -rf /var/lib/apt/lists/*
 
