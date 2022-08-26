@@ -1,6 +1,7 @@
 {
   "extends": "../base.tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
     "rootDir": "src",
     "outDir": "lib"
   },

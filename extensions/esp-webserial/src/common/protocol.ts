@@ -1,18 +1,18 @@
-import { JsonRpcServer } from "@theia/core/lib/common/messaging";
 import { Event } from "@theia/core/lib/common";
+import { MessageProtocol } from "./message";
 
 export const EspWebSerialBackendService = Symbol("EspWebSerialBackendService");
-export const ESP_REMOTE_FLASHER = "/services/esp-webserial";
+export const ESP_WEBSERIAL_FLASHER = "/services/esp-webserial";
 
-export interface EspWebSerialBackendService extends JsonRpcServer<FlasherClient> {
+export interface EspWebSerialBackendService {
   getFlashSectionsForCurrentWorkspace(
     workspace: string
-  ): Promise<any>;
+  ): Promise<MessageProtocol>;
 }
 
 export const WebSerialFlasherClient = Symbol("WebSerialBackendClient");
 
-export interface FlasherClient {
+export interface WebSerialClient {
   connect(): Promise<string>;
   flash(data: Buffer): void;
   onDidCloseConnection: Event<FlashEvents.ConnectionClosed>;
@@ -32,8 +32,8 @@ export enum FlashEvents {
   FlashError = "flash-error",
 }
 
-export interface FlashSectionInfo {
+export interface PartitionInfo {
   name: string;
-  bin: Buffer;
-  offset: string;
+  data: string;
+  address: number;
 }

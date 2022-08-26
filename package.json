@@ -4,7 +4,7 @@
     "prepare": "lerna run prepare",
     "rebuild:browser": "theia rebuild:browser",
     "rebuild:electron": "theia rebuild:electron",
-    "start:browser": "yarn rebuild:browser && yarn --cwd browser-app start --hostname=127.0.0.1 --port=8080",
+    "start:browser": "yarn rebuild:browser && yarn --cwd browser-app start:debug --hostname=127.0.0.1 --port=8080",
     "start:electron": "yarn rebuild:electron && yarn --cwd electron-app start",
     "watch": "lerna run --parallel watch"
   },
