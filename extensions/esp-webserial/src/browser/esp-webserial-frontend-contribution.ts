@@ -11,8 +11,8 @@ import {
 import { MessageService } from "@theia/core/lib/common/message-service";
 import { WorkspaceService } from "@theia/workspace/lib/browser";
 import { inject, injectable } from "inversify";
-import { ESPLoader } from "../esptooljs/esploader.js";
-import { Transport } from "../esptooljs/webserial.js";
+import { ESPLoader } from "../esptooljs/esploader";
+import { Transport } from "../esptooljs/webserial";
 import { TerminalService } from "@theia/terminal/lib/browser/base/terminal-service";
 import { TerminalWidget } from "@theia/terminal/lib/browser/base/terminal-widget";
 import { EspWebSerialBackendService } from "../common/protocol";
@@ -30,7 +30,6 @@ const EspWebSerialFlashCommand: Command = {
 
 @injectable()
 export class EspWebSerialCommandContribution implements CommandContribution {
-  // @inject(CommandService) private readonly commandService: CommandService,
   constructor(
     @inject(EspWebSerialBackendService)
     protected readonly espWebSerialBackendService: EspWebSerialBackendService,
@@ -136,8 +135,10 @@ export class EspWebSerialCommandContribution implements CommandContribution {
             progress.cancel();
             this.messageService.info("Done flashing");
           } catch (error) {
-            this.messageService.error(error);
             progress.cancel();
+            const errMsg = error && error.message ? error.message : typeof(error) === "string" ? error : "Something went wrong";
+            console.log(error);
+            this.messageService.error(errMsg);
           }
         }
       },

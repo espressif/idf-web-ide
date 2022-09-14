@@ -1,4 +1,4 @@
-FROM espressif/idf:v4.4.1
+FROM espressif/idf:v4.4.2
 
 # We use this label as a filter when cleaning our runners disk space up with docker-prune
 LABEL protected="true"
@@ -13,28 +13,25 @@ RUN apt-get update \
   && apt-get install -y -q ca-certificates \
   && curl -sL https://deb.nodesource.com/setup_16.x | bash \
   && apt install -y -q \
-    g++ \
-    git \
-    libglib2.0-0 \
-    libnuma1 \
-    libpixman-1-0 \
-    libsecret-1-dev \
-    make \
-    nodejs \
-    pkgconf \
+  g++ \
+  git \
+  libglib2.0-0 \
+  libnuma1 \
+  libpixman-1-0 \
+  libsecret-1-dev \
+  make \
+  nodejs \
+  pkgconf \
   && npm install -g yarn typescript \
   && rm -rf /var/lib/apt/lists/*
 
-RUN node --version
-RUN npm --version
-RUN yarn --version
-
 RUN cd /home/idf-web-ide/ && yarn
+
 RUN chmod g+rw /home && \
-    chmod g+rw /opt/esp && \
-    mkdir /home/projects && \
-    chown -R iwiuser:iwiuser /home/idf-web-ide && \
-    chown -R iwiuser:iwiuser /home/projects
+  chmod g+rw /opt/esp && \
+  mkdir /home/projects && \
+  chown -R iwiuser:iwiuser /home/idf-web-ide && \
+  chown -R iwiuser:iwiuser /home/projects
 
 WORKDIR /home/idf-web-ide/browser-app/
 
@@ -70,4 +67,4 @@ EXPOSE ${IWI_PORT}
 
 USER iwiuser
 
-CMD node src-gen/backend/main.js ${PROJECT_DIR} --hostname 0.0.0.0 --port ${IWI_PORT} --plugins=local-dir:../vscode-extensions
+CMD yarn start:debug ${PROJECT_DIR} --hostname=0.0.0.0 --port ${IWI_PORT}
