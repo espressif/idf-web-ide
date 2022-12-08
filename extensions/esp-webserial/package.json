@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "@theia/core": "latest",
-    "pako": "^2.0.4"
+    "esptool-js": "^0.1.0"
   },
   "devDependencies": {
     "rimraf": "latest",

@@ -25,11 +25,9 @@ export class EspWebSerialBackendServiceImpl implements EspWebSerialBackendServic
       }
       const flashFileJson = await readJSON(flashInfoFileName);
       const binPromises: Promise<PartitionInfo | Error>[] = [];
-      const results: { name: string; offset: string }[] = [];
       Object.keys(flashFileJson["flash_files"]).forEach((offset) => {
         const fileName = parse(flashFileJson["flash_files"][offset]).name;
         const filePath = join(workspacePath, "build", flashFileJson["flash_files"][offset]);
-        results.push({ name: fileName, offset: filePath });
         binPromises.push(
           this.readFileIntoBuffer(filePath, fileName, offset)
         );

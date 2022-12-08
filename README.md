@@ -20,7 +20,7 @@ This is the home for cloud/ desktop based IDE for [ESP-IDF](https://github.com/e
 
 - Create and Start a container from that image, notice we are mounting host OS `${PWD}` to `/home/projects` of the container
 
-  `$ docker run -d -e IWI_PORT=8080 -p 8080:8080 -v ${PWD}:/home/projects espressif/idf-web-ide --platform linux/amd64`
+  `$ docker run -d -e IWI_PORT=8080 -p 8080:8080 --platform linux/amd64 -v ${PWD}:/home/projects espressif/idf-web-ide`
 
 - Open `http://0.0.0.0:8080` in your browser (_use chrome for best experience_)
 

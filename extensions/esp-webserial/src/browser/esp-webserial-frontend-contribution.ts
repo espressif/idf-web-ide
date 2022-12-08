@@ -11,11 +11,10 @@ import {
 import { MessageService } from "@theia/core/lib/common/message-service";
 import { WorkspaceService } from "@theia/workspace/lib/browser";
 import { inject, injectable } from "inversify";
-import { ESPLoader } from "../esptooljs/esploader";
-import { Transport } from "../esptooljs/webserial";
+import { IEspLoaderTerminal, ESPLoader, Transport } from "esptool-js";
 import { TerminalService } from "@theia/terminal/lib/browser/base/terminal-service";
 import { TerminalWidget } from "@theia/terminal/lib/browser/base/terminal-widget";
-import { EspWebSerialBackendService } from "../common/protocol";
+import { EspWebSerialBackendService, PartitionInfo } from "../common/protocol";
 import { enc, MD5 } from "crypto-js";
 
 const EspWebSerialCommand: Command = {
@@ -70,8 +69,13 @@ export class EspWebSerialCommandContribution implements CommandContribution {
               { label: "230400" },
               { label: "115200" },
             ];
-            const selectedBaudRate = await this.quickInputService?.showQuickPick(items, { placeholder: "Choose connection baudrate"});
-            const baudRate = selectedBaudRate ? parseInt(selectedBaudRate.label) : 921600;
+            const selectedBaudRate =
+              await this.quickInputService?.showQuickPick(items, {
+                placeholder: "Choose connection baudrate",
+              });
+            const baudRate = selectedBaudRate
+              ? parseInt(selectedBaudRate.label)
+              : 921600;
             this.terminal = await this.terminalService.newTerminal({
               id: "webserial-flash",
               title: "Serial connection with WebSerial",
@@ -79,7 +83,22 @@ export class EspWebSerialCommandContribution implements CommandContribution {
             });
             await this.terminal.start();
             this.terminalService.open(this.terminal);
-            this.esploader = new ESPLoader(transport, baudRate, this.terminal);
+            const clean = () => {
+              this.terminal.clearOutput();
+            };
+            const writeLine = (data: string) => {
+              this.terminal.writeLine(data);
+            };
+            const write = (data: string) => {
+              this.terminal.write(data);
+            };
+
+            const loaderTerminal: IEspLoaderTerminal = {
+              clean,
+              write,
+              writeLine,
+            };
+            this.esploader = new ESPLoader(transport, baudRate, loaderTerminal);
             this.connected = true;
             this.chip = await this.esploader.main_fn();
           } catch (error) {
@@ -109,34 +128,41 @@ export class EspWebSerialCommandContribution implements CommandContribution {
               await this.espWebSerialBackendService.getFlashSectionsForCurrentWorkspace(
                 workspaceStat[0].resource.toString()
               );
-            const fileArray = msgProtocol._message.sections;
+            const fileArray = msgProtocol._message.sections as PartitionInfo[];
             const flashSize = msgProtocol._message.flash_size;
             const flashMode = msgProtocol._message.flash_mode;
             const flashFreq = msgProtocol._message.flash_freq;
             progress.report({
               message: `Flashing device (size: ${flashSize} mode: ${flashMode} frequency: ${flashFreq})...`,
             });
-            await this.esploader.write_flash({
+            await this.esploader.write_flash(
               fileArray,
-              flash_size: flashSize,
-              flash_mode: flashMode,
-              flash_freq: flashFreq,
-              reportProgress: (
+              flashSize,
+              flashMode,
+              flashFreq,
+              undefined,
+              undefined,
+              (
                 fileIndex: number,
                 written: number,
                 total: number
               ) => {
                 progress.report({
-                  message: `${fileArray[fileIndex].name} (${written}/${total})`,
+                  message: `${fileArray[fileIndex].data} (${written}/${total})`,
                 });
               },
-              calculateMD5Hash: (image: string) => MD5(enc.Latin1.parse(image)),
-            });
+              (image: string) => MD5(enc.Latin1.parse(image)).toString(),
+            );
             progress.cancel();
             this.messageService.info("Done flashing");
           } catch (error) {
             progress.cancel();
-            const errMsg = error && error.message ? error.message : typeof(error) === "string" ? error : "Something went wrong";
+            const errMsg =
+              error && error.message
+                ? error.message
+                : typeof error === "string"
+                ? error
+                : "Something went wrong";
             console.log(error);
             this.messageService.error(errMsg);
           }
