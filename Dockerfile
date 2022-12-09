@@ -29,9 +29,9 @@ RUN cd /home/idf-web-ide/ && yarn
 
 RUN chmod g+rw /home && \
   chmod g+rw /opt/esp && \
-  mkdir /home/projects && \
+  mkdir /home/iwiuser/projects && \
   chown -R iwiuser:iwiuser /home/idf-web-ide && \
-  chown -R iwiuser:iwiuser /home/projects
+  chown -R iwiuser:iwiuser /home/iwiuser/projects
 
 WORKDIR /home/idf-web-ide/browser-app/
 
@@ -70,4 +70,3 @@ EXPOSE ${IWI_PORT}
 USER iwiuser
 
 CMD yarn start:debug ${PROJECT_DIR} --hostname=0.0.0.0 --port ${IWI_PORT}
-ENTRYPOINT [ "/opt/esp/entrypoint.sh" ]

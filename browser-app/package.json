@@ -31,7 +31,7 @@
     "@types/crypto-js": "^4.1.1"
   },
   "scripts": {
-    "prepare": "yarn build && theia download:plugins",
+    "prepare": "yarn build && theia download:plugins --parallel=false",
     "build": "theia build --mode development",
     "start": "theia start --plugins=local-dir:../vscode-extensions",
     "start:debug": "theia start --log-level=debug --plugins=local-dir:../vscode-extensions",

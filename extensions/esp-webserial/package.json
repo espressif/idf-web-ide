@@ -13,6 +13,7 @@
     "esptool-js": "^0.1.0"
   },
   "devDependencies": {
+    "@types/w3c-web-serial": "^1.0.3",
     "rimraf": "latest",
     "typescript": "latest"
   },
