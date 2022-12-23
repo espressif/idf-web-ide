@@ -18,9 +18,9 @@ import { TerminalService } from "@theia/terminal/lib/browser/base/terminal-servi
 import { EspWebSerialBackendService, PartitionInfo } from "../common/protocol";
 import { enc, MD5 } from "crypto-js";
 
-const EspWebSerialCommand: Command = {
+const EspWebSerialDisconnectCommand: Command = {
   id: "EspWebSerial",
-  label: "Connect device to Esptool",
+  label: "Disconnect device to Esptool",
 };
 
 const EspWebSerialFlashCommand: Command = {
@@ -50,7 +50,7 @@ export class EspWebSerialCommandContribution implements CommandContribution {
     protected readonly terminalService: TerminalService
   ) {}
 
-  chip: any;
+  chip: string;
   connected = false;
   isConsoleClosed = false;
   transport: Transport;
@@ -58,20 +58,38 @@ export class EspWebSerialCommandContribution implements CommandContribution {
   terminal: TerminalWidget;
 
   registerCommands(registry: CommandRegistry): void {
-    registry.registerCommand(EspWebSerialCommand, {
+    registry.registerCommand(EspWebSerialDisconnectCommand, {
+      execute: async () => {
+        if (this.transport) {
+          await this.transport.disconnect();
+          await this.transport.waitForUnlock(1000);
+        }
+        if (this.terminal) {
+          this.terminal.dispose();
+        }
+       }
+    });
+
+    registry.registerCommand(EspWebSerialFlashCommand, {
       execute: async () => {
         if (this.workspaceService.opened) {
-          // const workspaceStat = this.workspaceService.tryGetRoots();
-          const serial = (navigator as any).serial;
-          if (!serial) {
+          if (!navigator.serial) {
             return undefined;
           }
-          const port = await serial.requestPort();
+          const port = await navigator.serial.requestPort();
           if (!port) {
             return undefined;
           }
           this.transport = new Transport(port);
 
+          const workspaceStat = this.workspaceService.tryGetRoots();
+          const progress = await this.messageService.showProgress({
+            text: "Flashing with WebSerial...",
+          });
+          progress.report({
+            message: "Getting binaries from project...",
+            work: { done: 10, total: 100 },
+          });
           try {
             const items = [
               { label: "921600" },
@@ -86,27 +104,16 @@ export class EspWebSerialCommandContribution implements CommandContribution {
             const baudRate = selectedBaudRate
               ? parseInt(selectedBaudRate.label)
               : 921600;
-            const outputChnl = await this.outputChannelManager.getChannel(
-              "WebSerial Flash"
-            );
-            outputChnl.show();
-            // this.terminal = await this.terminalService.newTerminal({
-            //   id: "webserial-flash",
-            //   title: "Serial connection with WebSerial",
-            //   cwd: workspaceStat[0].resource.toString(),
-            // });
-            // await this.terminal.start();
-            // this.terminalService.open(this.terminal);
+            const outputChnl =
+              this.outputChannelManager.getChannel("WebSerial Flash");
+            outputChnl.show({ preserveFocus: true });
             const clean = () => {
-              // this.terminal.clearOutput();
               outputChnl.clear();
             };
             const writeLine = (data: string) => {
-              // this.terminal.writeLine(data);
               outputChnl.appendLine(data);
             };
             const write = (data: string) => {
-              // this.terminal.write(data);
               outputChnl.append(data);
             };
 
@@ -122,29 +129,6 @@ export class EspWebSerialCommandContribution implements CommandContribution {
             );
             this.connected = true;
             this.chip = await this.esploader.main_fn();
-          } catch (error) {
-            const err = error && error.message ? error.message : error;
-            console.log(error);
-            this.messageService.error(err);
-          }
-        } else {
-          this.messageService.info("Open a workspace first.");
-        }
-      },
-    });
-
-    registry.registerCommand(EspWebSerialFlashCommand, {
-      execute: async () => {
-        if (this.workspaceService.opened) {
-          const workspaceStat = this.workspaceService.tryGetRoots();
-          const progress = await this.messageService.showProgress({
-            text: "Flashing with WebSerial...",
-          });
-          progress.report({
-            message: "Getting binaries from project...",
-            work: { done: 10, total: 100 },
-          });
-          try {
             const msgProtocol =
               await this.espWebSerialBackendService.getFlashSectionsForCurrentWorkspace(
                 workspaceStat[0].resource.toString()
@@ -172,6 +156,7 @@ export class EspWebSerialCommandContribution implements CommandContribution {
             );
             progress.cancel();
             this.messageService.info("Done flashing");
+            await this.transport.disconnect();
           } catch (error) {
             progress.cancel();
             const errMsg =
@@ -183,6 +168,8 @@ export class EspWebSerialCommandContribution implements CommandContribution {
             console.log(error);
             this.messageService.error(errMsg);
           }
+        } else {
+          this.messageService.info("Open a workspace first.");
         }
       },
     });
@@ -210,16 +197,17 @@ export class EspWebSerialCommandContribution implements CommandContribution {
           await this.terminal.start();
           this.terminalService.open(this.terminal);
           this.isConsoleClosed = false;
-          this.terminal.onDidDispose(() => {
+          this.terminal.onDidDispose(async () => {
             this.isConsoleClosed = true;
-            this.transport.disconnect();
+            await this.transport.disconnect();
           });
 
-          this.terminal.onKey((keyEvent) => {
-            console.log(`terminal 'onKey' event: { key: '${keyEvent.key}', code: ${keyEvent.domEvent.code} }`)
-            if (keyEvent.domEvent.code === "SIGINT") {
-              this.isConsoleClosed = true;
-              this.transport.disconnect();
+          this.terminal.onKey(async (keyEvent) => {
+            console.log(
+              `terminal 'onKey' event: { key: '${keyEvent.key}', code: ${keyEvent.domEvent.code} }`
+            );
+            if (keyEvent.domEvent.code === "KeyC" || keyEvent.domEvent.code === "BracketRight") {
+              this.terminal.dispose();
             }
           });
 
@@ -249,8 +237,8 @@ export class EspWebSerialMenuContribution implements MenuContribution {
     const REMOTE = [...MAIN_MENU_BAR, "10_remote"];
     menus.registerSubmenu(REMOTE, "Remote");
     menus.registerMenuAction(REMOTE, {
-      commandId: EspWebSerialCommand.id,
-      label: EspWebSerialCommand.label,
+      commandId: EspWebSerialDisconnectCommand.id,
+      label: EspWebSerialDisconnectCommand.label,
     });
     menus.registerMenuAction(REMOTE, {
       commandId: EspWebSerialFlashCommand.id,
