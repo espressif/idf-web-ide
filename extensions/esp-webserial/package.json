@@ -1,5 +1,5 @@
 {
-  "name": "esp-remote-flasher",
+  "name": "esp-webserial",
   "keywords": [
     "theia-extension"
   ],
@@ -9,9 +9,11 @@
     "src"
   ],
   "dependencies": {
-    "@theia/core": "latest"
+    "@theia/core": "latest",
+    "esptool-js": "^0.1.0"
   },
   "devDependencies": {
+    "@types/w3c-web-serial": "^1.0.3",
     "rimraf": "latest",
     "typescript": "latest"
   },
@@ -23,8 +25,8 @@
   },
   "theiaExtensions": [
     {
-      "frontend": "lib/browser/esp-remote-flasher-frontend-module",
-      "backend": "lib/node/esp-remote-flasher-backend-module"
+      "frontend": "lib/browser/esp-webserial-frontend-module",
+      "backend": "lib/node/esp-webserial-backend-module"
     }
   ]
 }

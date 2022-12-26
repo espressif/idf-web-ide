@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react/index";
 import { inject, injectable, postConstruct } from "inversify";
 import { ReactWidget } from "@theia/core/lib/browser/widgets/react-widget";
 import { serialize } from "bson";
@@ -7,7 +7,6 @@ import { MessageProtocol } from "../common/message";
 import { MonitorType } from "../common/monitor";
 import { RemoteMonitor } from "./remoteMonitor";
 import { MonitorComponent } from "./components/monitor";
-
 export interface MonitorMessage {
   type: MonitorType;
   message: any;
@@ -86,12 +85,10 @@ export class MonitorWidget extends ReactWidget {
     remoteMonitor.stop();
   }
 
-  protected render(): React.ReactNode {
-    return (
-      <MonitorComponent
-        messages={this.messages}
-        onNewMessage={(message: string) => this.handleUserMsg(message)}
-      />
-    );
+  protected render() {
+    return (<MonitorComponent
+      messages={this.messages}
+      onNewMessage={(message: string) => this.handleUserMsg(message)}
+    />);
   }
 }

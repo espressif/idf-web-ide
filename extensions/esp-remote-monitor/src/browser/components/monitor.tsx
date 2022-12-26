@@ -1,10 +1,10 @@
-import * as React from "react";
+import * as React from "react/index";
 import { MonitorType } from "../../common/monitor";
 import { MonitorMessage } from "../monitor-widget";
-import * as ansiToHTML from "ansi-to-html";
+import ansiToHTML = require("ansi-to-html");
 import ReactHtmlParser from "react-html-parser";
 
-interface MonitorComponentProps {
+export interface MonitorComponentProps {
   messages: Array<MonitorMessage>;
   onNewMessage: Function;
 }
@@ -12,12 +12,7 @@ interface MonitorComponentProps {
 const converter = new ansiToHTML();
 
 export class MonitorComponent extends React.Component<MonitorComponentProps> {
-  constructor(props: any) {
-    super(props);
-    this.messages.bind(this);
-  }
-
-  messages(props: any): JSX.Element {
+  messages(props: any) {
     const messages: Array<MonitorMessage> = props.messages;
     const htmlMessages = messages.map((m: MonitorMessage, i: number) => {
       if (m.type === MonitorType.MessageFromChip) {
@@ -64,7 +59,20 @@ export class MonitorComponent extends React.Component<MonitorComponentProps> {
     }
   }
 
-  render(): React.ReactNode {
+  render() {
+    const htmlMessages = this.props.messages.map((m: MonitorMessage, i: number) => {
+      if (m.type === MonitorType.MessageFromChip) {
+        return (
+          <div key={i}>{ReactHtmlParser(converter.toHtml(m.message))}</div>
+        );
+      }
+      return (
+        <div style={{ textAlign: "right" }} key={i}>
+          {m.message}
+          <span>&nbsp;&lt;</span>
+        </div>
+      );
+    });
     return <div className="container is-fluid" style={{ height: 'inherit' }}>
         <div className="field is-grouped">
             <p className="control is-expanded">
@@ -75,8 +83,8 @@ export class MonitorComponent extends React.Component<MonitorComponentProps> {
             </p>
         </div>
         <div id="messagesPane" className="notification fixed-height-100-per-minus-4em is-scrollable background-transparent" style={{ backgroundColor: "transparent" }}>
-            <this.messages messages={this.props.messages} />
+          <div>{htmlMessages}</div>
         </div>
     </div>
-}
+  }
 }
