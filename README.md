@@ -1,7 +1,6 @@
 [![GitHub release](https://img.shields.io/github/release/espressif/idf-web-ide.svg?style=flat-square)](https://github.com/espressif/idf-web-ide/releases/latest)
-[![Docker workflow](https://img.shields.io/github/workflow/status/espressif/idf-web-ide/Publish%20docker%20image?label=Docker%20build%20status&logo=docker)](https://github.com/espressif/idf-web-ide/actions?workflow=Publish%20docker%20image)
+![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/espressif/idf-web-ide/docker-push.yml?label=Dockerhub%20push%20status&logo=docker)
 [![Docker Releases](https://img.shields.io/badge/-Docker%20Releases-blue)](https://hub.docker.com/r/espbignacio/idf-web-ide)
-
 # Espressif IDF WEB IDE
 
 This is the home for cloud/ desktop based IDE for [ESP-IDF](https://github.com/espressif/esp-idf) for quick development with Espressif devices.
