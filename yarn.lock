@@ -4397,15 +4397,13 @@ esprima@~3.1.0:
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-3.1.3.tgz#fdca51cee6133895e3c88d535ce49dbff62a4633"
   integrity sha512-AWwVMNxwhN8+NIPQzAQZCm7RkLC4RbM3B1OobMuyp3i+w73X57KCKaVIxaRZb+DYCojq7rspo+fmuQfAboyhFg==
 
-esptool-js@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/esptool-js/-/esptool-js-0.1.0.tgz#0863ce5fa43c233071357025848c5d54ef6acc27"
-  integrity sha512-narztLY7EMWU29HAwFmPnY/jF024hTWWPcMmK65fojQI9fZxBmORWs3H8aVZulxjIlDWhlcDN68IqcxNHV36gQ==
+esptool-js@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/esptool-js/-/esptool-js-0.2.1.tgz#57f72edc52090ca99250bab97c55cc04a78e142f"
+  integrity sha512-M2UteDiWrllJOBWLHwNRGaEAkDEHAG6FH6LdsTxJPUFLxbH/xwFMQEudiVH+REZc0FGfvY0YntVMes+HkZBeKw==
   dependencies:
-    crypto-js "^4.0.0"
     pako "^2.1.0"
     tslib "^2.4.1"
-    xterm "^4.13.0"
 
 esrecurse@^4.3.0:
   version "4.3.0"
@@ -9660,7 +9658,7 @@ xterm-addon-search@^0.8.2:
   resolved "https://registry.yarnpkg.com/xterm-addon-search/-/xterm-addon-search-0.8.2.tgz#be7aa74d5ff12c901707c6ff674229f214318032"
   integrity sha512-I1863mjn8P6uVrqm/X+btalVsqjAKLhnhpbP7SavAOpEkI1jJhbHU2UTp7NjeRtcKTks6UWk/ycgds5snDSejg==
 
-xterm@^4.13.0, xterm@^4.16.0:
+xterm@^4.16.0:
   version "4.19.0"
   resolved "https://registry.yarnpkg.com/xterm/-/xterm-4.19.0.tgz#c0f9d09cd61de1d658f43ca75f992197add9ef6d"
   integrity sha512-c3Cp4eOVsYY5Q839dR5IejghRPpxciGmLWWaP9g+ppfMeBChMeLa1DCA+pmX/jyDZ+zxFOmlJL/82qVdayVoGQ==
