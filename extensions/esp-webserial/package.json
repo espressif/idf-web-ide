@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "@theia/core": "latest",
-    "esptool-js": "^0.1.0"
+    "esptool-js": "^0.2.1"
   },
   "devDependencies": {
     "@types/w3c-web-serial": "^1.0.3",
