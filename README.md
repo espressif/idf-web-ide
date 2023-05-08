@@ -3,7 +3,9 @@
 [![Docker Releases](https://img.shields.io/badge/-Docker%20Releases-blue)](https://hub.docker.com/r/espbignacio/idf-web-ide)
 # Espressif IDF WEB IDE
 
-This is the home for cloud/ desktop based IDE for [ESP-IDF](https://github.com/espressif/esp-idf) for quick development with Espressif devices.
+Cloud or desktop IDE for [ESP-IDF](https://github.com/espressif/esp-idf) quick development with Espressif devices that includes the [ESP-IDF extension for Visual Studio Code](https://github.com/espressif/vscode-esp-idf-extension). 
+
+Made with [Eclipse Theia](https://github.com/eclipse-theia/theia).
 
 ## Getting started
 
@@ -13,13 +15,9 @@ This is the home for cloud/ desktop based IDE for [ESP-IDF](https://github.com/e
 
   `docker pull espbignacio/idf-web-ide`
 
-- Build Docker Image using the DockerFile
-
-  `$ docker build . --tag espressif/idf-web-ide --platform linux/amd64`
-
 - Create and Start a container from that image, notice we are mounting host OS `${PWD}` to `/home/projects` of the container
 
-  `$ docker run -d -e IWI_PORT=8080 -p 8080:8080 --platform linux/amd64 -v ${PWD}:/home/projects espressif/idf-web-ide`
+  `$ docker run -d -e IWI_PORT=8080 -p 8080:8080 --platform linux/amd64 -v ${PWD}:/home/projects espbignacio/idf-web-ide`
 
 - Open `http://0.0.0.0:8080` in your browser (_use chrome for best experience_)
 
@@ -31,6 +29,11 @@ This is the home for cloud/ desktop based IDE for [ESP-IDF](https://github.com/e
 - `$ cd browser-app`
 - `$ yarn run start --port=8080`
 - Open `127.0.0.1:8080` in your browser (_use chrome for best experience_)
+- Alternatively, build the Docker Image using the DockerFile in the source
+
+  `$ docker build . --tag espbignacio/idf-web-ide --platform linux/amd64`
+
+- Run the image as container as shown in the previous section.
 
 ### Use the desktop companion to flash and monitor local Espressif devices
 

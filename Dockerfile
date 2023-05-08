@@ -69,4 +69,6 @@ EXPOSE ${IWI_PORT}
 
 USER iwiuser
 
+ENTRYPOINT ["/opt/esp/entrypoint.sh"]
+
 CMD yarn start:debug ${PROJECT_DIR} --hostname=0.0.0.0 --port ${IWI_PORT}
