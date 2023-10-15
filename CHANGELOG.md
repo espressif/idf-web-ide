@@ -4,12 +4,6 @@
 
 All notable changes to the "Espressif IDF Web IDE" extension will be documented in this file.
 
-## [0.0.4](https://github.com/espressif/idf-web-ide/releases/tag/v0.0.4)
-
-### Features and enhancements
-
-- [Update ESP-IDF extension to 1.6.5 and esptool-js v0.3.1](https://github.com/espressif/idf-web-ide/pull/6)
-
 ## [0.0.3](https://github.com/espressif/idf-web-ide/releases/tag/v0.0.3)
 
 ### Features and enhancements
