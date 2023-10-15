@@ -17,7 +17,7 @@
     "@theia/terminal": "latest",
     "@theia/vsx-registry": "latest",
     "@theia/workspace": "latest",
-    "bson": "^4.0.2",
+    "bson": "4.0.2",
     "crypto-js": "^4.0.0",
     "esp-remote-flasher": "0.0.1",
     "esp-remote-monitor": "0.0.1",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@theia/cli": "latest",
-    "@types/bson": "^4.0.0",
+    "@types/bson": "4.0.0",
     "@types/crypto-js": "^4.1.1"
   },
   "scripts": {

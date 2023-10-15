@@ -11,7 +11,13 @@ import {
 import { MessageService } from "@theia/core/lib/common/message-service";
 import { WorkspaceService } from "@theia/workspace/lib/browser";
 import { inject, injectable } from "inversify";
-import { IEspLoaderTerminal, ESPLoader, Transport } from "esptool-js";
+import {
+  IEspLoaderTerminal,
+  ESPLoader,
+  FlashOptions,
+  Transport,
+  LoaderOptions,
+} from "esptool-js";
 import { OutputChannelManager } from "@theia/output/lib/browser/output-channel";
 import { TerminalWidget } from "@theia/terminal/lib/browser/base/terminal-widget";
 import { TerminalService } from "@theia/terminal/lib/browser/base/terminal-service";
@@ -67,7 +73,7 @@ export class EspWebSerialCommandContribution implements CommandContribution {
         if (this.terminal) {
           this.terminal.dispose();
         }
-       }
+      },
     });
 
     registry.registerCommand(EspWebSerialFlashCommand, {
@@ -122,11 +128,14 @@ export class EspWebSerialCommandContribution implements CommandContribution {
               write,
               writeLine,
             };
-            this.esploader = new ESPLoader(
-              this.transport,
-              baudRate,
-              loaderTerminal
-            );
+            const loaderOptions: LoaderOptions = {
+              transport: this.transport,
+              port,
+              baudrate: baudRate,
+              romBaudrate: baudRate,
+              terminal: loaderTerminal,
+            };
+            this.esploader = new ESPLoader(loaderOptions);
             this.connected = true;
             this.chip = await this.esploader.main_fn();
             const msgProtocol =
@@ -140,20 +149,26 @@ export class EspWebSerialCommandContribution implements CommandContribution {
             progress.report({
               message: `Flashing device (size: ${flashSize} mode: ${flashMode} frequency: ${flashFreq})...`,
             });
-            await this.esploader.write_flash(
+            const flashOptions: FlashOptions = {
               fileArray,
               flashSize,
               flashMode,
               flashFreq,
-              undefined,
-              undefined,
-              (fileIndex: number, written: number, total: number) => {
+              eraseAll: false,
+              compress: false,
+              reportProgress: (
+                fileIndex: number,
+                written: number,
+                total: number
+              ) => {
                 progress.report({
                   message: `${fileArray[fileIndex].data} (${written}/${total})`,
                 });
               },
-              (image: string) => MD5(enc.Latin1.parse(image)).toString()
-            );
+              calculateMD5Hash: (image: string) =>
+                MD5(enc.Latin1.parse(image)).toString(),
+            };
+            await this.esploader.write_flash(flashOptions);
             progress.cancel();
             this.messageService.info("Done flashing");
             await this.transport.disconnect();
@@ -206,7 +221,10 @@ export class EspWebSerialCommandContribution implements CommandContribution {
             console.log(
               `terminal 'onKey' event: { key: '${keyEvent.key}', code: ${keyEvent.domEvent.code} }`
             );
-            if (keyEvent.domEvent.code === "KeyC" || keyEvent.domEvent.code === "BracketRight") {
+            if (
+              keyEvent.domEvent.code === "KeyC" ||
+              keyEvent.domEvent.code === "BracketRight"
+            ) {
               this.terminal.dispose();
             }
           });
