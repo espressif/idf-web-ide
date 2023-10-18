@@ -18,17 +18,14 @@
     "@theia/vsx-registry": "latest",
     "@theia/workspace": "latest",
     "bson": "4.0.2",
-    "crypto-js": "^4.0.0",
     "esp-remote-flasher": "0.0.1",
-    "esp-remote-monitor": "0.0.1",
     "esp-remote-welcome-page": "0.0.1",
     "esp-webserial": "0.0.1",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@theia/cli": "latest",
-    "@types/bson": "4.0.0",
-    "@types/crypto-js": "^4.1.1"
+    "@types/bson": "4.0.0"
   },
   "scripts": {
     "prepare": "yarn build && theia download:plugins --parallel=false",

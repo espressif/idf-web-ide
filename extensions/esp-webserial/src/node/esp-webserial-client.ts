@@ -1,14 +1,13 @@
 import { injectable } from "inversify";
-import { createReadStream, pathExists, readJSON } from "fs-extra";
+import { pathExists, readJSON, readFile } from "fs-extra";
 import { join, parse } from "path";
-import {
-  EspWebSerialBackendService,
-  PartitionInfo
-} from "../common/protocol";
+import { EspWebSerialBackendService, PartitionInfo } from "../common/protocol";
 import { MessageProtocol } from "../common/message";
 
 @injectable()
-export class EspWebSerialBackendServiceImpl implements EspWebSerialBackendService {
+export class EspWebSerialBackendServiceImpl
+  implements EspWebSerialBackendService
+{
   private readonly flashInfoFileName: string = "flasher_args.json";
 
   getFlashSectionsForCurrentWorkspace(workspace: string) {
@@ -21,16 +20,18 @@ export class EspWebSerialBackendServiceImpl implements EspWebSerialBackendServic
       );
       const isBuilt = await pathExists(flashInfoFileName);
       if (!isBuilt) {
-        return reject("Build before flashing")
+        return reject("Build before flashing");
       }
       const flashFileJson = await readJSON(flashInfoFileName);
       const binPromises: Promise<PartitionInfo | Error>[] = [];
       Object.keys(flashFileJson["flash_files"]).forEach((offset) => {
         const fileName = parse(flashFileJson["flash_files"][offset]).name;
-        const filePath = join(workspacePath, "build", flashFileJson["flash_files"][offset]);
-        binPromises.push(
-          this.readFileIntoBuffer(filePath, fileName, offset)
+        const filePath = join(
+          workspacePath,
+          "build",
+          flashFileJson["flash_files"][offset]
         );
+        binPromises.push(this.readFileIntoBuffer(filePath, fileName, offset));
       });
       const binaries = await Promise.all(binPromises);
       const message = new MessageProtocol("flash");
@@ -47,27 +48,13 @@ export class EspWebSerialBackendServiceImpl implements EspWebSerialBackendServic
     name: string,
     offset: string
   ) {
-    return new Promise<PartitionInfo | Error>((resolve, reject) => {
-      const fileBuffer: Buffer[] = new Array<Buffer>();
-      const stream = createReadStream(filePath);
-      stream.on("data", (chunk: Buffer) => {
-        fileBuffer.push(chunk);
-      });
-      stream.on("end", () => {
-        const fileBufferResult: PartitionInfo = {
-          data: Buffer.concat(fileBuffer).toString(),
-          name,
-          address: parseInt(offset),
-        };
-        return resolve(fileBufferResult);
-      });
-      stream.on("error", (err) => {
-        return reject(err);
-      });
-    });
+    const fileData = await readFile(filePath, "binary");
+    return {
+      data: fileData,
+      name,
+      address: parseInt(offset),
+    } as PartitionInfo;
   }
 
-  dispose(): void {
-    
-  }
+  dispose(): void {}
 }
