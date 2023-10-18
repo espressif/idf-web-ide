@@ -57,9 +57,10 @@ export class EspWebSerialCommandContribution implements CommandContribution {
   ) {}
 
   chip: string;
+  port: SerialPort | undefined;
   connected = false;
   isConsoleClosed = false;
-  transport: Transport;
+  transport: Transport | undefined;
   esploader: ESPLoader;
   terminal: TerminalWidget;
 
@@ -69,6 +70,11 @@ export class EspWebSerialCommandContribution implements CommandContribution {
         if (this.transport) {
           await this.transport.disconnect();
           await this.transport.waitForUnlock(1000);
+          this.transport = undefined;
+        }
+        if (this.port) {
+          await this.port?.close();
+          this.port = undefined;
         }
         if (this.terminal) {
           this.terminal.dispose();
@@ -82,11 +88,11 @@ export class EspWebSerialCommandContribution implements CommandContribution {
           if (!navigator.serial) {
             return undefined;
           }
-          const port = await navigator.serial.requestPort();
-          if (!port) {
+          this.port = await navigator.serial.requestPort();
+          if (!this.port) {
             return undefined;
           }
-          this.transport = new Transport(port);
+          this.transport = new Transport(this.port);
 
           const workspaceStat = this.workspaceService.tryGetRoots();
           const progress = await this.messageService.showProgress({
@@ -128,13 +134,11 @@ export class EspWebSerialCommandContribution implements CommandContribution {
               write,
               writeLine,
             };
-            const loaderOptions: LoaderOptions = {
+            const loaderOptions = {
               transport: this.transport,
-              port,
               baudrate: baudRate,
-              romBaudrate: baudRate,
               terminal: loaderTerminal,
-            };
+            } as LoaderOptions;
             this.esploader = new ESPLoader(loaderOptions);
             this.connected = true;
             this.chip = await this.esploader.main_fn();
@@ -143,35 +147,47 @@ export class EspWebSerialCommandContribution implements CommandContribution {
                 workspaceStat[0].resource.toString()
               );
             const fileArray = msgProtocol._message.sections as PartitionInfo[];
+            fileArray.forEach((element) => {
+              outputChnl.appendLine(
+                `File ${element.name} Address: ${element.address} HASH: ${MD5(
+                  enc.Latin1.parse(element.data)
+                ).toString()}`
+              );
+            });
             const flashSize = msgProtocol._message.flash_size;
             const flashMode = msgProtocol._message.flash_mode;
             const flashFreq = msgProtocol._message.flash_freq;
+
             progress.report({
               message: `Flashing device (size: ${flashSize} mode: ${flashMode} frequency: ${flashFreq})...`,
             });
-            const flashOptions: FlashOptions = {
+            const flashOptions = {
               fileArray,
-              flashSize,
-              flashMode,
-              flashFreq,
+              flashSize: "keep",
+              flashMode: "keep",
+              flashFreq: "keep",
               eraseAll: false,
-              compress: false,
+              compress: true,
               reportProgress: (
                 fileIndex: number,
                 written: number,
                 total: number
               ) => {
                 progress.report({
-                  message: `${fileArray[fileIndex].data} (${written}/${total})`,
+                  message: `${fileArray[fileIndex].name}.bin: (${written}/${total})`,
                 });
+                outputChnl.appendLine(`Image ${fileArray[fileIndex].name}.bin: (${written}/${total})`);
               },
               calculateMD5Hash: (image: string) =>
                 MD5(enc.Latin1.parse(image)).toString(),
-            };
+            } as FlashOptions;
             await this.esploader.write_flash(flashOptions);
             progress.cancel();
             this.messageService.info("Done flashing");
             await this.transport.disconnect();
+            await this.transport.waitForUnlock(1000);
+            this.transport = undefined;
+            this.port = undefined;
           } catch (error) {
             progress.cancel();
             const errMsg =
@@ -192,15 +208,14 @@ export class EspWebSerialCommandContribution implements CommandContribution {
     registry.registerCommand(EspWebSerialMonitorCommand, {
       execute: async () => {
         if (this.transport === undefined) {
-          const serial = navigator.serial;
-          if (!serial) {
+          if (!navigator.serial) {
             return undefined;
           }
-          const port = await serial.requestPort();
-          if (!port) {
+          this.port = await navigator.serial.requestPort();
+          if (!this.port) {
             return undefined;
           }
-          this.transport = new Transport(port);
+          this.transport = new Transport(this.port);
           await this.transport.connect();
         }
 
@@ -214,7 +229,9 @@ export class EspWebSerialCommandContribution implements CommandContribution {
           this.isConsoleClosed = false;
           this.terminal.onDidDispose(async () => {
             this.isConsoleClosed = true;
-            await this.transport.disconnect();
+            await this.transport?.disconnect();
+            this.transport = undefined;
+            this.port = undefined;
           });
 
           this.terminal.onKey(async (keyEvent) => {

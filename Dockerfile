@@ -1,4 +1,4 @@
-FROM espressif/idf:v4.4.3
+FROM espressif/idf:v4.4.6
 
 # We use this label as a filter when cleaning our runners disk space up with docker-prune
 LABEL protected="true"
@@ -28,6 +28,7 @@ RUN apt-get update \
 RUN cd /home/idf-web-ide/ && yarn
 
 RUN chmod g+rw /home && \
+  chmod g+rw /home/iwiuser && \
   chmod g+rw /opt/esp && \
   mkdir /home/iwiuser/projects && \
   chown -R iwiuser:iwiuser /home/idf-web-ide && \
